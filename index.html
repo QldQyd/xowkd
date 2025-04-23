@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>업데이트 중...</title>
+  <style>
+    body {
+      background: black;
+      color: lime;
+      font-family: monospace;
+      padding: 20px;
+      overflow: hidden;
+      transition: background 1s ease;
+    }
+    #loadingText, #hacked, #erasing {
+      font-size: 1.5em;
+    }
+    #hacked, #erasing {
+      display: none;
+      animation: glitch 0.3s infinite;
+    }
+
+    #hacked {
+      color: red;
+      font-size: 2em;
+    }
+
+    #erasing {
+      color: white;
+      font-size: 1.3em;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-2px, 2px); }
+      50% { transform: translate(2px, -2px); }
+      75% { transform: translate(-1px, 1px); }
+      100% { transform: translate(1px, -1px); }
+    }
+
+    .darken {
+      background: #111 !important;
+    }
+
+    #crack {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>업데이트 중...</h1>
+  <p id="loadingText">시스템 점검 중...</p>
+  <div id="hacked">*** 시스템 해킹됨 ***</div>
+  <div id="erasing">>> 데이터 삭제 중... <span id="dots"></span></div>
+
+  <img id="crack" src="https://i.imgur.com/6QK0XfU.png" alt="깨진 화면" />
+
+  <audio id="glitchSound" src="https://www.soundjay.com/button/sounds/beep-10.mp3" preload="auto"></audio>
+  <audio id="glassSound" src="https://www.soundjay.com/glass/sounds/glass-break-2.mp3" preload="auto"></audio>
+
+  <script>
+    let counter = 0;
+    const loadingText = document.getElementById("loadingText");
+    const hacked = document.getElementById("hacked");
+    const erasing = document.getElementById("erasing");
+    const glitchSound = document.getElementById("glitchSound");
+    const glassSound = document.getElementById("glassSound");
+    const dots = document.getElementById("dots");
+    const crack = document.getElementById("crack");
+
+    const interval = setInterval(() => {
+      counter++;
+      loadingText.textContent = `시스템 점검 중... ${counter * 10}%`;
+      if (counter === 10) {
+        clearInterval(interval);
+        loadingText.style.display = "none";
+        hacked.style.display = "block";
+        document.body.style.background = "red";
+        document.body.style.color = "white";
+
+        let shakeInterval = setInterval(() => {
+          glitchSound.play();
+          document.body.style.transform = `rotate(${Math.random() * 2 - 1}deg) scale(${1 + Math.random() * 0.05})`;
+        }, 300);
+
+        setTimeout(() => {
+          hacked.style.display = "none";
+          erasing.style.display = "block";
+          document.body.classList.add("darken");
+
+          let dotCount = 0;
+          const dotsInterval = setInterval(() => {
+            dots.textContent = '.'.repeat(dotCount % 4);
+            dotCount++;
+            glitchSound.play();
+          }, 400);
+
+          setTimeout(() => {
+            clearInterval(shakeInterval);
+            clearInterval(dotsInterval);
+            crack.style.display = "block";
+            glassSound.play();
+            alert("!!! 모든 파일이 삭제되었습니다 !!!\n복구할 수 없습니다.");
+          }, 5000);
+
+        }, 3000);
+      }
+    }, 500);
+  </script>
+</body>
+</html>
